@@ -38,6 +38,7 @@ function course_certificate_admin_certificate_ui() {
 			$role = sanitize_text_field($_POST['role']);
 			$notes = sanitize_text_field($_POST['notes']);
 			$view = sanitize_text_field($_POST['view']);
+			$editid = sanitize_text_field($_POST['editid']);
 			$result = course_certificate_add_course_certificate($code,$name, $dob, $event, $duration, $role,  $notes, $view, $editid);
 			if( $result == 1 ) {
 				if( $editid != "" ) {
