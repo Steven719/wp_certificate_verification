@@ -169,7 +169,7 @@ function course_certificate_certificate_search_form(){
 	if( isset($_POST['code_data']) ){
 		$code = sanitize_text_field($_POST['certificate_code']);
 		global $wpdb;
-		$rows = $wpdb->get_results( "SELECT * FROM segwitz_course_certificates where certificate_code = '$code'"); 
+		$rows = $wpdb->get_results( "SELECT * FROM course_certificates where certificate_code = '$code'"); 
 		if( !empty($rows) ){
 		$output .= '<h1 class="rs-heading">Search Result</h1>
 		</strong>
@@ -185,19 +185,17 @@ function course_certificate_certificate_search_form(){
                     <th class="btlr-10">Role</th>
                     <th class="btlr-10">Notes</th>
                     <th class="btlr-10">View</th>
-                    <th>Course</th>
-                    <th>Hours Completed</th>
-                    <th class="br-0 btrr-10">Award Date</th>
                 </tr>
             </thead>
             <tbody>';
 			foreach ( $rows as $data ){
             	$output .= '<tr>
             		<td class="bl-1">'.$data->student_name.'</td>
+            		<td>'.date("d/M/Y", strtotime($data->dob)).'</td>
+            		<td>'.$data->event.'</td>
             		<td>'.$data->course_name.'</td>
             		<td>'.$data->course_hours.'</td>
             		<td>'.$data->certificate_code.'</td>
-            		<td>'.date("d/M/Y", strtotime($data->dob)).'</td>
             		<td>'.date("d/M/Y", strtotime($data->award_date)).'</td>
             	</tr>';
             }

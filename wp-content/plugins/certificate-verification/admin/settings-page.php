@@ -27,17 +27,18 @@ function course_certificate_admin_certificate_ui() {
             } else {
                 $error = '<div class="alert alert-danger hide-alert">Error while deleting!<button type="button" class="close" data-dismiss="alert">x</button></div>';
             }
-		} else if( empty($_POST['certificate_code']) || empty($_POST['std_name']) || empty($_POST['course_name']) || empty($_POST['course_hours']) || empty($_POST['dob']) || empty($_POST['award_date']) ) {
+		} else if( empty($_POST['certificate_code']) || empty($_POST['std_name']) || empty($_POST['event']) || empty($_POST['dob']) || empty($_POST['duration']) ) {
 			$error = '<div class="alert alert-danger hide-alert">All fields are required!<button type="button" class="close" data-dismiss="alert">x</button></div>';
 		} else {
 			$code = sanitize_text_field($_POST['certificate_code']);
 			$name = sanitize_text_field($_POST['std_name']);
-			$course = sanitize_text_field($_POST['course_name']);
-			$hours = sanitize_text_field($_POST['course_hours']);
 			$dob = sanitize_text_field($_POST['dob']);
-			$award_date = sanitize_text_field($_POST['award_date']);
-			$editid = sanitize_text_field($_POST['editid']);
-			$result = course_certificate_add_course_certificate($code, $name, $course, $hours, $dob, $award_date, $editid);
+			$event = sanitize_text_field($_POST['event']);
+			$duration = sanitize_text_field($_POST['duration']);
+			$role = sanitize_text_field($_POST['role']);
+			$notes = sanitize_text_field($_POST['notes']);
+			$view = sanitize_text_field($_POST['view']);
+			$result = course_certificate_add_course_certificate($code,$name, $dob, $event, $duration, $role,  $notes, $view, $editid);
 			if( $result == 1 ) {
 				if( $editid != "" ) {
 	                $error = '<div class="alert alert-success hide-alert">Certificate updated successfully!<button type="button" class="close" data-dismiss="alert">x</button></div>';
@@ -50,7 +51,7 @@ function course_certificate_admin_certificate_ui() {
 		}
 	}
 	global $wpdb;
-    $certificates = $wpdb->get_results( "SELECT * FROM segwitz_course_certificates");
+    $certificates = $wpdb->get_results( "SELECT * FROM course_certificates");
     $cpage = sanitize_text_field( $_GET['pg'] );
     $cpage = $cpage != '' ? (($cpage-1)*10) : 0;
 	$certificatesNew = array_slice($certificates, $cpage, 10, true);
@@ -308,12 +309,14 @@ function course_certificate_admin_certificate_ui() {
 					<label for="selectAll"></label>
 				</span>
 	          </th>
-	          <th>Student Name</th>
-	          <th>Course</th>
-	          <th>Hours Completed</th>
-	          <th>Certificate No</th>
+	          <th>Name</th>
 	          <th>Date Of Birth</th>
-	          <th>Award Date</th>
+	          <th>Event</th>
+	          <th>Duration</th>
+	          <th>Certificate No</th>
+	          <th>Role</th>
+	          <th>Notes</th>
+	          <th>View</th>
 	          <th>Actions</th>
 	        </tr>
 	      </thead>
@@ -327,11 +330,13 @@ function course_certificate_admin_certificate_ui() {
 						</span>
 			        </td>
 	                <td class="sname"><?php echo $value->student_name; ?></td>
-	                <td class="cname"><?php echo $value->course_name; ?></td>
-	                <td class="chour"><?php echo $value->course_hours; ?></td>
-	                <td class="ccode"><?php echo $value->certificate_code; ?></td>
 	                <td class="cdob" date="<?php echo $value->dob; ?>"><?php echo date("d/M/Y", strtotime($value->dob)); ?></td>
-	                <td class="cadt" date="<?php echo $value->award_date; ?>"><?php echo date("d/M/Y", strtotime($value->award_date)); ?></td>
+	                <td class="cevent"><?php echo $value->event; ?></td>
+	                <td class="cduration"><?php echo $value->duration; ?></td>
+	                <td class="ccode"><?php echo $value->certificate_code; ?></td>
+	                <td class="crole"><?php echo $value->role; ?></td>
+	                <td class="cnotes"><?php echo $value->notes; ?></td>
+	                <td class="cview"><?php echo $value->view; ?></td>
 			        <td>
 			           <a href="javascript:void();" class="edit editModal" data-id="<?php echo $value->id;?>"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
 			           <a href="javascript:void(0);" class="delete deleteModal" data-id="<?php echo $value->id;?>"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
@@ -373,28 +378,35 @@ function course_certificate_admin_certificate_ui() {
 	            <label>Student Name</label>
 	            <input type="text" class="form-control" required name="std_name">
 	          </div>
+			  <div class="form-group">
+				<label>Date of Birth</label>
+				<input type="text" id="dob" required class="form-control" readonly="readonly">
+				<input type="hidden" id="adob" name="dob">
+			  </div>
 	          <div class="form-group">
-				<label>Course Name</label>
-				<input type="text" required class="form-control" name="course_name">
+				<label>Event</label>
+				<input type="text" required class="form-control" name="event">
 	          </div>
 	          <div class="form-group">
-				<label>Hours Completed</label>
-				<input type="text" required class="form-control" name="course_hours">
+				<label>Duration</label>
+				<input type="text" required class="form-control" name="duration">
 	          </div>
 	          <div class="form-group">
 				<label>Certification No</label>
 				<input type="text" required class="form-control" value="<?php echo substr(md5(rand()), 0, 7); ?>" name="certificate_code" readonly="readonly">
 	          </div>
 			  <div class="form-group">
-				<label>Date of Birth</label>
-				<input type="text" id="dob" required class="form-control" readonly="readonly">
-				<input type="hidden" id="adob" name="dob">
-			  </div>
+				<label>Role</label>
+				<input type="text" class="form-control" name="role">
+	          </div>
 			  <div class="form-group">
-				<label>Award Date</label>
-				<input type="text" id="award_date" required class="form-control" readonly="readonly">
-				<input type="hidden" id="aaward_date" name="award_date">
-			  </div>
+				<label>Notes</label>
+				<input type="text" class="form-control" name="notes">
+	          </div>
+			  <div class="form-group">
+				<label>View</label>
+				<input type="text" class="form-control" name="view">
+	          </div>
 	        </div>
 	        <div class="modal-footer">
 	          <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
@@ -415,32 +427,39 @@ function course_certificate_admin_certificate_ui() {
 	          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 	        </div>
 	        <div class="modal-body">
-	          <div class="form-group">
+			<div class="form-group">
 	            <label>Student Name</label>
 	            <input type="text" class="form-control" required name="std_name">
-	          </div>
-	          <div class="form-group">
-				<label>Course Name</label>
-				<input type="text" required class="form-control" name="course_name">
-	          </div>
-	          <div class="form-group">
-				<label>Hours Completed</label>
-				<input type="text" required class="form-control" name="course_hours">
-	          </div>
-	          <div class="form-group">
-				<label>Certification No</label>
-				<input type="text" required class="form-control" value="<?php echo substr(md5(rand()), 0, 7); ?>" name="certificate_code" readonly="readonly">
 	          </div>
 			  <div class="form-group">
 				<label>Date of Birth</label>
 				<input type="text" id="editdob" required class="form-control" readonly="readonly">
 				<input type="hidden" id="eeditdob" name="dob">
 			  </div>
+	          <div class="form-group">
+				<label>Event</label>
+				<input type="text" required class="form-control" name="event">
+	          </div>
+	          <div class="form-group">
+				<label>Duration</label>
+				<input type="text" required class="form-control" name="duration">
+	          </div>
+	          <div class="form-group">
+				<label>Certification No</label>
+				<input type="text" required class="form-control" value="<?php echo substr(md5(rand()), 0, 7); ?>" name="certificate_code" readonly="readonly">
+	          </div>
 			  <div class="form-group">
-				<label>Award Date</label>
-				<input type="text" id="editaward_date" required class="form-control" readonly="readonly">
-				<input type="hidden" id="eeditaward_date" name="award_date">
-			  </div>
+				<label>Role</label>
+				<input type="text" class="form-control" name="role">
+	          </div>
+			  <div class="form-group">
+				<label>Notes</label>
+				<input type="text" class="form-control" name="notes">
+	          </div>
+			  <div class="form-group">
+				<label>View</label>
+				<input type="text" class="form-control" name="view">
+	          </div>
 	        </div>
 	        <div class="modal-footer">
 				<input type="hidden" name="editid" value="">
@@ -488,23 +507,23 @@ function course_certificate_admin_certificate_ui() {
 			jQuery(document).on("click", ".editModal", function() {
 				var id = jQuery(this).data("id");
 				var sname = jQuery(".sname", jQuery(this).closest("tr")).html();
-				var cname = jQuery(".cname", jQuery(this).closest("tr")).html();
-				var ccode = jQuery(".ccode", jQuery(this).closest("tr")).html();
-				var chour = jQuery(".chour", jQuery(this).closest("tr")).html();
 				var cdob  = jQuery(".cdob", jQuery(this).closest("tr")).html();
-				var cadt  = jQuery(".cadt", jQuery(this).closest("tr")).html();
-				var ocdob  = jQuery(".cdob", jQuery(this).closest("tr")).attr("date");
-				var ocadt  = jQuery(".cadt", jQuery(this).closest("tr")).attr("date");
+				var cevent = jQuery(".cevent", jQuery(this).closest("tr")).html();
+				var cduration  = jQuery(".cduration", jQuery(this).closest("tr")).html();
+				var ccode = jQuery(".ccode", jQuery(this).closest("tr")).html();
+				var crole  = jQuery(".crole", jQuery(this).closest("tr")).html();
+				var cnotes  = jQuery(".cnotes", jQuery(this).closest("tr")).html();
+				var cview  = jQuery(".cview", jQuery(this).closest("tr")).html();
 
 				jQuery("#editEmployeeModal input[name=editid]").val( id );
 				jQuery("#editEmployeeModal input[name=std_name]").val(sname);
-				jQuery("#editEmployeeModal input[name=course_name]").val(cname);
-				jQuery("#editEmployeeModal input[name=course_hours]").val(chour);
-				jQuery("#editEmployeeModal input[name=certificate_code]").val(ccode);
-				jQuery("#editEmployeeModal input[name=dob]").val(ocdob);
 				jQuery("#editEmployeeModal #editdob").val(cdob);
-				jQuery("#editEmployeeModal input[name=award_date]").val(ocadt);
-				jQuery("#editEmployeeModal #editaward_date").val(cadt);
+				jQuery("#editEmployeeModal input[name=event]").val(cevent);
+				jQuery("#editEmployeeModal input[name=duration]").val(cduration);
+				jQuery("#editEmployeeModal input[name=certificate_code]").val(ccode);
+				jQuery("#editEmployeeModal input[name=role]").val(crole);
+				jQuery("#editEmployeeModal input[name=notes]").val(cnotes);
+				jQuery("#editEmployeeModal input[name=view]").val(cview);
 
 				jQuery("#editEmployeeModal").modal();
 			});

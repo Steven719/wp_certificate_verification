@@ -1,25 +1,29 @@
 <?php // Plugin Functions
-function course_certificate_add_course_certificate($code, $name, $course, $hours, $dob, $award_date, $editid){
+function course_certificate_add_course_certificate($code,$name, $dob, $event, $duration, $role,  $notes, $view, $editid){
 	global $wpdb;
     if( is_numeric($editid) && $editid != '' ) {
-        $result = $wpdb->update('segwitz_course_certificates', array(
+        $result = $wpdb->update('course_certificates', array(
             'certificate_code' => $code,
             'student_name' => $name,
-            'course_name'  => $course,
-            'course_hours' => $hours,
+            'duration'  => $duration,
+            'event' => $event,
             'dob' => $dob,
-            'award_date' => $award_date,
+            'role' => $role,
+            'notes' => $notes,
+            'view' => $view,
             ),
             array( 'id' => $editid )
         );
     } else {
-        $result = $wpdb->insert('segwitz_course_certificates', array(
+        $result = $wpdb->insert('course_certificates', array(
             'certificate_code' => $code,
             'student_name' => $name,
-            'course_name'  => $course,
-            'course_hours' => $hours,
             'dob' => $dob,
-            'award_date' => $award_date,
+            'event'  => $event,
+            'duration' => $duration,
+            'role' => $role,
+            'notes' => $notes,
+            'view' => $view,
             )
         );
     }
@@ -30,7 +34,7 @@ function course_certificate_delete_course_certificate($editid) {
     global $wpdb;
     $result = false;
     if( is_numeric($editid) && $editid != '' ) {
-        $result = $wpdb->delete('segwitz_course_certificates', array( 'id' => $editid ));
+        $result = $wpdb->delete('course_certificates', array( 'id' => $editid ));
     }
     return $result;
 }
