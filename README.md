@@ -29,5 +29,43 @@ o Color Adjustment: The color #f6f8fd must be removed.
 ---
 
 ## Delivery Requirements:
+
 • The fully customized plugin must be delivered as a ZIP file ready for installation in a WordPress environment.
+
 • The solution must ensure that both the field and visual customizations work seamlessly and maintain coherence across all components (admin dashboard, front-end search, and data storage).
+
+## Key Libraries:
+ **WordPress PlugIn**
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+Ensure you have the following installed:
+
+ **WrodPress 5.6**
+
+### Installation
+
+1. **Clone the repository**:
+   ```
+      git clone https://github.com/4CSB/Veil___First-Creation-of-Our-CSB-Team.git
+   ```
+
+2. **Install dependencies**:
+   ```
+      npm install
+      # or
+      yarn install
+   ```
+3. **Start the development server**:
+   ```
+      npm start
+      # or
+      yarn start
+   ```
+
+## 💡 Written
+
+### Steven James
+
