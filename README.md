@@ -1,10 +1,11 @@
 #  🐾 WordPress Plugin Customization Expert Needed  🐾 
 We are looking for an experienced WordPress/PHP developer to customize the "Certificate Verification" plugin developed by SegWitz Sdn Bhd. (GitHub: https://github.com/SegWitz/wordpress-course-certificate-verification-plugin).
+
 The plugin currently provides an interface for administrators to enter certificate details and for end-users to verify certificates via a front-end search form.
 
 ---
 
-What We Need:
+## What We Need:
 1. Field Customization:
 o Current Field Titles (Labels): Student Name, Course, Hours Completed, Certificate No, Date Of Birth, Award Date
 o New Field Titles (Labels): Name, Date of Birth, Event, Duration, Certificate No, Role, Notes, View
@@ -18,6 +19,6 @@ o Color Adjustment: The color #f6f8fd must be removed.
 
 ---
 
-Delivery Requirements:
+## Delivery Requirements:
 • The fully customized plugin must be delivered as a ZIP file ready for installation in a WordPress environment.
 • The solution must ensure that both the field and visual customizations work seamlessly and maintain coherence across all components (admin dashboard, front-end search, and data storage).
