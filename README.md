@@ -1,4 +1,4 @@
-# WordPress Plugin Customization Expert Needed
+#  🐾 WordPress Plugin Customization Expert Needed  🐾 
 We are looking for an experienced WordPress/PHP developer to customize the "Certificate Verification" plugin developed by SegWitz Sdn Bhd. (GitHub: https://github.com/SegWitz/wordpress-course-certificate-verification-plugin).
 The plugin currently provides an interface for administrators to enter certificate details and for end-users to verify certificates via a front-end search form.
 
